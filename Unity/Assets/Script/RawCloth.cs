@@ -5,7 +5,9 @@ public class RawCloth : MonoBehaviour {
     public List<Vector3> node_list=new List<Vector3>();
     private Mesh m_polyMesh;
     private Material m_polyMaterial;
-    private float line_width=0.005f;
+    private int line_width=2;
+    private RawClothMgr raw_cloth_mgr;
+    Camera cam_2d;
 
     private InputMgr input_mgr;
     private void Awake() {
@@ -13,19 +15,21 @@ public class RawCloth : MonoBehaviour {
         node_list.Add(new Vector3(0.2f,-0.4f,-5f));
         node_list.Add(new Vector3(0.2f,0.4f,-5f));
         node_list.Add(new Vector3(-0.2f,0.4f,-5f));
+        cam_2d=GameObject.Find("Cam2d").GetComponent<Camera>();
         m_polyMesh=new Mesh();
         GenerateMesh();
         GenerateMaterial();
         input_mgr = GameObject.Find("InputMgr").GetComponent<InputMgr>();
-        RawClothMgr.Instance.raw_clothes.Add(this);
+        raw_cloth_mgr=RawClothMgr.Instance;
+        raw_cloth_mgr.raw_clothes.Add(this);
     }
 
     Vector3[] GetLineMesh(Vector3 p1, Vector3 p2){
-        
         Vector3 line_dir=p2-p1;
         line_dir.z=0;
         Vector3 d1 = Vector3.Cross(line_dir, Vector3.back).normalized;
-        d1=d1*line_width;
+        float line_width_w=Util.Screen2WorldDist(line_width, cam_2d);
+        d1=d1*line_width_w;
         Vector3 d2=-d1;
         Vector3 w1=d1+p1;
         Vector3 w2=d1+p2;
@@ -69,7 +73,12 @@ public class RawCloth : MonoBehaviour {
         m_polyMesh.SetIndices(indices,MeshTopology.Triangles,0);
     }
 
+    public void OnZoom(){
+        GenerateMesh();
+    }
+
     private void Update() {
-        Graphics.DrawMesh(m_polyMesh, Vector3.zero, Quaternion.identity, m_polyMaterial, 0, null, 0, null, false, false, false);
+        Graphics.DrawMesh(m_polyMesh, transform.position, transform.rotation, m_polyMaterial, 0, null, 0, null, false, false, false);
+        // Graphics.DrawMesh(m_polyMesh, Vector3.zero, Quaternion.identity, m_polyMaterial, 0, null, 0, null, false, false, false);
     }
 }

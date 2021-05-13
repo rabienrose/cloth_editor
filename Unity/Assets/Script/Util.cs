@@ -4,7 +4,13 @@ static class Util{
     public static float WorldDist2Screen(float world_dist, Camera cam){
         float cam_half_h=cam.orthographicSize;
         float screen_half_h=Screen.height/2f;
-        return world_dist=world_dist*screen_half_h/cam_half_h;
+        return world_dist*screen_half_h/cam_half_h;
+    }
+
+    public static float Screen2WorldDist(int screendist, Camera cam){
+        float cam_half_h=cam.orthographicSize;
+        float screen_half_h=Screen.height/2f;
+        return screendist*cam_half_h/screen_half_h;
     }
 
     public static Vector2 Screen2World2D(Vector2 pt, Camera cam){
@@ -19,6 +25,7 @@ static class Util{
         re_v.y=cam_pos.y+(pt.y-screen_half_h)*scale;
         return re_v;
     }
+    
     public static Vector2 Screen2World2D3(Vector3 pt, Camera cam){
         Vector2 pt2=new Vector2();
         pt2.x=pt.x;

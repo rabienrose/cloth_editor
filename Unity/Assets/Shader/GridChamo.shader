@@ -7,6 +7,10 @@
 	{
 		Pass
 		{
+			// Blend Off
+			// Cull Off
+			// ZTest Always
+			// ZWrite Off
 			CGPROGRAM
 			#include "UnityCG.cginc"
 			#pragma vertex vert  
